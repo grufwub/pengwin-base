@@ -36,3 +36,12 @@ if ( which cmd.exe >/dev/null ); then
   fi
 
 fi
+
+# Load user custom scripts
+if test -d "$HOME/.config/shellrc" ; then
+  for file in "$HOME/.config/shellrc" ; do
+    test -r "$file" && . "$file"
+  done
+
+  unset file
+fi
