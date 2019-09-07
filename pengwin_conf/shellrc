@@ -14,12 +14,12 @@ alias clear='clear -x'
 alias ll='ls -al'
 
 # Check if we have Windows Path
-if ( which cmd.exe >/dev/null ); then
+if ( which cmd.exe > /dev/null 2>&1 ); then
 
   # Execute on user's shell first-run
-  if [ ! -f "${HOME}/.firstrun" ]; then
+  if [ ! -f "$HOME/.firstrun" ]; then
     echo "Welcome to Pengwin. Type 'pengwin-setup' to run the setup tool. You will only see this message on the first run."
-    touch "${HOME}/.firstrun"
+    touch "$HOME/.firstrun"
   fi
 
   if ( ! wslpath 'C:\' > /dev/null 2>&1 ); then
@@ -28,18 +28,20 @@ if ( which cmd.exe >/dev/null ); then
 
   # Create a symbolic link to the windows home
   wHomeWinPath=$(cmd-exe /c 'echo %HOMEDRIVE%%HOMEPATH%' | tr -d '\r')
-  export WIN_HOME=$(wslpath -u "${wHomeWinPath}")
+  export WIN_HOME=$(wslpath -u "$wHomeWinPath")
+  unset wHomeWinPath
 
   win_home_lnk=${HOME}/winhome
-  if [ ! -e "${win_home_lnk}" ] ; then
-    ln -s -f "${WIN_HOME}" "${win_home_lnk}"
+  if [ ! -e "$win_home_lnk" ] ; then
+    ln -sf "$WIN_HOME" "$win_home_lnk"
   fi
+  unset win_home_lnk
 
 fi
 
 # Load user custom scripts
-if test -d "$HOME/.config/shellrc" ; then
-  for file in "$HOME/.config/shellrc" ; do
+if ( test -d "$HOME/.config/pengwin_conf/shellrc.d" ); then
+  for file in "$HOME/.config/pengwin_conf/shellrc.d"; do
     test -r "$file" && . "$file"
   done
 
