@@ -39,11 +39,19 @@ if ( which cmd.exe > /dev/null 2>&1 ); then
 
 fi
 
+# Load global custom scripts
+if ( test -d "$0.d" ); then
+  for file in "$0.d"; do
+    test -r "$file" && ."$file"
+  done
+
+  unset file
+fi
+
 # Load user custom scripts
 if ( test -d "$HOME/.config/pengwin_conf/shellrc.d" ); then
   for file in "$HOME/.config/pengwin_conf/shellrc.d"; do
     test -r "$file" && . "$file"
   done
-
   unset file
 fi

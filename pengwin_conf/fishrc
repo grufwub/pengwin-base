@@ -43,6 +43,15 @@ if ( which cmd.exe > /dev/null )
 
 end
 
+# Load global custom scripts
+if ( test -d "$0.d" )
+  for file in "$0.d"
+    test -r "$file" && ."$file"
+  end
+
+  set -e file
+end
+
 # Load user custom scripts
 if ( test -d "$HOME/.config/pengwin_conf/fishrc.d" )
   for file in "$HOME/.config/pengwin_conf/fishrc.d"
