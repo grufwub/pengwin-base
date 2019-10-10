@@ -40,18 +40,21 @@ if ( which cmd.exe > /dev/null 2>&1 ); then
 fi
 
 # Load global custom scripts
-if ( test -d "$0.d" ); then
-  for file in "$0.d"; do
-    test -r "$file" && ."$file"
+rc='/etc/pengwin_conf/shellrc.d'
+if [ -d "$rc" ]; then
+  for file in "$rc"; do
+    [ -r "$file" ] && . "$file"
   done
-
   unset file
 fi
+unset rc
 
 # Load user custom scripts
-if ( test -d "$HOME/.config/pengwin_conf/shellrc.d" ); then
-  for file in "$HOME/.config/pengwin_conf/shellrc.d"; do
-    test -r "$file" && . "$file"
+user_rc="$HOME/.config/pengwin_conf/shellrc.d"
+if ( test -d "$user_rc" ); then
+  for file in "$user_rc"; do
+    [ -r "$file" ] && . "$file"
   done
   unset file
 fi
+unset user_rc

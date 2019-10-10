@@ -1,11 +1,11 @@
 # enable external x display
-set -x DISPLAY=:0
+set -x DISPLAY :0
 
 # enable external libgl
-set -x LIBGL_ALWAYS_INDIRECT=1
+set -x LIBGL_ALWAYS_INDIRECT 1
 
 # speed up some GUI apps like gedit
-set -x NO_AT_BRIDGE=1
+set -x NO_AT_BRIDGE 1
 
 # Fix 'clear' scrolling issues
 alias clear='clear -x'
@@ -14,18 +14,17 @@ alias clear='clear -x'
 alias ll='ls -al'
 
 # Check if we have Windows Path
-if ( which cmd.exe > /dev/null )
-
+if which cmd.exe > /dev/null
   # (we shouldn't end up needing to do this with fish shell,
   #  but may as well leave it just in case)
   # Execute on user's shell first-run
-  if ( ! test -f "$HOME/.firstrun" )
+  if [ ! -f "$HOME/.firstrun" ]
     echo "Welcome to Pengwin. Type 'pengwin-setup' to run the setup tool. You will only see this message on the first run."
     touch "$HOME/.firstrun"
-  fi
+  end
 
   # Check if legacy install requiring legacy_wslupath
-  if ( ! wslpath 'C:\' > /dev/null 2>&1 )
+  if ! wslpath 'C:\\' > /dev/null 2>&1
     alias wslpath='legacy_wslupath'
   end
 
@@ -36,27 +35,28 @@ if ( which cmd.exe > /dev/null )
 
   # Setup Windows home dir symbolic link
   set win_home_lnk "$HOME/winhome"
-  if ( test -e "$win_home_lnk" )
+  if [ -e "$win_home_lnk" ]
     ln -sf "$WIN_HOME" "$win_home_lnk"
   end
   set -e win_home_lnk
-
 end
 
 # Load global custom scripts
-if ( test -d "$0.d" )
-  for file in "$0.d"
-    test -r "$file" && ."$file"
+set rc '/etc/pengwin_conf/fishrc.d'
+if [ -d "$rc" ]
+  for file in (ls "$rc")
+    [ -r "$file" ] && . "$file"
   end
-
   set -e file
 end
+set -e rc
 
 # Load user custom scripts
-if ( test -d "$HOME/.config/pengwin_conf/fishrc.d" )
-  for file in "$HOME/.config/pengwin_conf/fishrc.d"
-    test -r "$file" && . "$file"
+set user_rc "$HOME/.config/pengwin_conf/fishrc.d"
+if [ -d "$user_rc" ]
+  for file in (ls "$user_rc")
+    [ -r "$file" ] && . "$file"
   end
-
   set -e file
 end
+set -e user_rc
