@@ -42,7 +42,8 @@ fi
 # Load global custom scripts
 rc='/etc/pengwin_conf/shellrc.d'
 if [ -d "$rc" ]; then
-  for file in "$rc"; do
+  for file in $(ls "$rc"); do
+    file="$rc/$file"
     [ -r "$file" ] && . "$file"
   done
   unset file
@@ -52,7 +53,8 @@ unset rc
 # Load user custom scripts
 user_rc="$HOME/.config/pengwin_conf/shellrc.d"
 if ( test -d "$user_rc" ); then
-  for file in "$user_rc"; do
+  for file in $(ls "$user_rc"); do
+    file="$user_rc/$file"
     [ -r "$file" ] && . "$file"
   done
   unset file

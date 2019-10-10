@@ -45,6 +45,7 @@ end
 set rc '/etc/pengwin_conf/fishrc.d'
 if [ -d "$rc" ]
   for file in (ls "$rc")
+    set file "$rc/$file"
     [ -r "$file" ] && . "$file"
   end
   set -e file
@@ -55,6 +56,7 @@ set -e rc
 set user_rc "$HOME/.config/pengwin_conf/fishrc.d"
 if [ -d "$user_rc" ]
   for file in (ls "$user_rc")
+    set file "$user_rc/$file"
     [ -r "$file" ] && . "$file"
   end
   set -e file
